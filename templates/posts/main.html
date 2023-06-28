@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block scripts %}
+<script src="{% static 'js/posts.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block title %}posts{% endblock title %}
+
+{% block content %}
+
+{% comment %} {% for post in posts %}
+<p>{{post}} - {{post.body}}</p>
+{% endfor %} {% endcomment %}
+<div id="spinner-box">
+    <div class="spinner-border" role="status">
+    </div>
+</div>
+<div id="hello-world"></div>
+
+{% endblock content %}
