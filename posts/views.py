@@ -54,3 +54,44 @@ def like_unlike_post(request):
             liked = True
             obj.likes.add(request.user)
         return JsonResponse({'liked':liked,'count':obj.like_count})
+
+def post_detail_data_view(request, pk):
+    post = Post.objects.get(pk=pk)
+    data = {
+        'title':post.title,
+        'body':post.body,
+        'author':post.author.user.username,
+        'logged_in': request.user.username,
+    }
+    return JsonResponse({'data':data})
+
+def post_detail(request, pk):
+    post = Post.objects.get(pk=pk)
+    form = PostForm(instance=post)
+    if form.is_valid():
+        print(form)
+    context = {
+        'post':post,
+        'form':form,
+    }
+    return render(request, 'posts/detail.html', context)
+
+def update_post(request, pk):
+    # post = Post.objects.get(pk=pk)
+    # if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    #     new_title = request.POST.get('title')
+    #     new_body = request.POST.get('body')
+    #     post.title = new_title
+    #     post.body = new_body
+    #     post.save()
+    # return JsonResponse({
+    #     'title':new_title,
+    #     'body':new_body,
+    # })
+    return JsonResponse({'msg': 'Delete'})
+def delete_post(request, pk):
+    print("Hello Delete")
+    # post = Post.objects.get(pk=pk)
+    # if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    #     post.delete()
+    return JsonResponse({})
