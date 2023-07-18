@@ -77,18 +77,17 @@ def post_detail(request, pk):
     return render(request, 'posts/detail.html', context)
 
 def update_post(request, pk):
-    # post = Post.objects.get(pk=pk)
-    # if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-    #     new_title = request.POST.get('title')
-    #     new_body = request.POST.get('body')
-    #     post.title = new_title
-    #     post.body = new_body
-    #     post.save()
-    # return JsonResponse({
-    #     'title':new_title,
-    #     'body':new_body,
-    # })
-    return JsonResponse({'msg': 'Delete'})
+    post = Post.objects.get(pk=pk)
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        new_title = request.POST.get('title')
+        new_body = request.POST.get('body')
+        post.title = new_title
+        post.body = new_body
+        post.save()
+    return JsonResponse({
+        'title':new_title,
+        'body':new_body,
+    })
 def delete_post(request, pk):
     print("Hello Delete")
     # post = Post.objects.get(pk=pk)

@@ -1,1 +1,4 @@
 venv
+posts_project/__pycache__
+.idea
+__pycache__

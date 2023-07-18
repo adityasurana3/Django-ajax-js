@@ -9,7 +9,14 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')
 const alertBox = document.querySelector('.alert-box')
 const url = window.location.href
 
+const csrftoken = getCookie('csrftoken');
 
+const deleted = localStorage.getItem('title')
+
+if (deleted){
+    handleAlerts('danger',`Post ${deleted} has been deleted`)
+    localStorage.clear();
+}
 
 const getCookie = (name) => {
     let cookieValue = null;
@@ -26,7 +33,6 @@ const getCookie = (name) => {
     }
     return cookieValue;
 }
-const csrftoken = getCookie('csrftoken');
 
 const likeUnlikePosts = (e) =>{
     const likeUnkileForms = [...document.getElementsByClassName('like-unlike-forms')]
@@ -139,6 +145,7 @@ postForm.addEventListener('submit',e=>{
             `)
             likeUnlikePosts();
             $("#addPostModal").modal('hide')
+            postForm.reset();
             handleAlerts('success','New post added');
             setTimeout(() => {
                 const close_alert = document.querySelector('.alert-box');
