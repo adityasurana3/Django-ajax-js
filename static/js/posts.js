@@ -9,7 +9,7 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')
 const alertBox = document.querySelector('.alert-box')
 const url = window.location.href
 
-const csrftoken = getCookie('csrftoken');
+
 
 const deleted = localStorage.getItem('title')
 
@@ -33,7 +33,7 @@ const getCookie = (name) => {
     }
     return cookieValue;
 }
-
+const csrftoken = getCookie('csrftoken');
 const likeUnlikePosts = (e) =>{
     const likeUnkileForms = [...document.getElementsByClassName('like-unlike-forms')]
     likeUnkileForms.forEach(form=> form.addEventListener('submit',e=>{
