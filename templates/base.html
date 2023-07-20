@@ -16,8 +16,10 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <!-- dropzone -->
-    <link rel="stylesheet" href="{% static 'css/dropzone.css' %}">
-    <script src="{% static 'js/dropzone.js' %}" defer></script>
+    {% comment %} <link rel="stylesheet" href="{% static 'css/dropzone.css' %}">
+    <script src="{% static 'js/dropzone.js' %}" defer></script> {% endcomment %}
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 
     <!-- Custom js -->
     <script src="{% static 'js/utils.js' %}" defer></script>

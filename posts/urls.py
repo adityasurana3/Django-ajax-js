@@ -10,4 +10,5 @@ urlpatterns = [
     path('<pk>/update/', views.update_post, name='update-post'),
     path('<pk>/delete/', views.delete_post, name='delete-post'),
     path('<pk>/data/', views.post_detail_data_view, name='post-detail-data'),
+    path('upload/', views.image_upload_view, name='image_upload')
 ]

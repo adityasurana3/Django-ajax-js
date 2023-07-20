@@ -14,9 +14,9 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')
 const alertBox = document.querySelector('#alert-box')
 
 
-back.addEventListener('click',function(){
-    window.history.back()
-})
+// back.addEventListener('click',function(){
+//     window.history.back()
+// })
 
 $.ajax({
     type: "GET",

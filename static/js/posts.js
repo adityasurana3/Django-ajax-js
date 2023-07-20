@@ -7,6 +7,9 @@ const title = document.getElementById('id_title')
 const body = document.getElementById('id_body')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 const alertBox = document.querySelector('.alert-box')
+const addBtn = document.getElementById('add-btn')
+const closeBtns = [...document.getElementsByClassName('add-modal-close')]
+const dropzone = document.getElementById('my-dropzone')
 const url = window.location.href
 
 
@@ -110,7 +113,7 @@ loadBtn.addEventListener('click',()=>{
     getData()
 })
 
-
+let newPostId = null
 
 postForm.addEventListener('submit',e=>{
     e.preventDefault();
@@ -123,6 +126,7 @@ postForm.addEventListener('submit',e=>{
             'body':body.value,
         },
         success: function(response){
+            newPostId = response.id
             post.insertAdjacentHTML('afterbegin',`
                 <div class="card mb-2">
                         <div class="card-body">
@@ -132,7 +136,7 @@ postForm.addEventListener('submit',e=>{
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-1">
-                                    <a href="#" class="btn btn-primary">Details</a>
+                                    <a href="${url}${response.id}" class="btn btn-primary">Details</a>
                                 </div>
                                 <div class="col-1">
                                     <form class="like-unlike-forms" data-form-id="${response.id}">
@@ -144,8 +148,8 @@ postForm.addEventListener('submit',e=>{
                     </div>
             `)
             likeUnlikePosts();
-            $("#addPostModal").modal('hide')
-            postForm.reset();
+            // $("#addPostModal").modal('hide')
+            // postForm.reset();
             handleAlerts('success','New post added');
             setTimeout(() => {
                 const close_alert = document.querySelector('.alert-box');
@@ -165,5 +169,36 @@ postForm.addEventListener('submit',e=>{
 })
 
 let visible = 3;
+
+
+addBtn.addEventListener('click',(e)=>{
+    dropzone.classList.remove('not-visible')
+})
+
+closeBtns.forEach(btn=> btn.addEventListener('click',(e)=>{
+    postForm.reset();
+    if(!dropzone.classList.contains('not-visibble')){
+        dropzone.classList.add("not-visible")
+    }
+    const myDropzone = Dropzone.forElement("#my-dropzone")
+    myDropzone.removeAllFiles(true)
+
+}))
+
+Dropzone.autoDiscover = false
+
+const myDropzone = new Dropzone('#my-dropzone',{
+    url: 'upload/',
+    init: function(){
+        this.on('sending',function(file, xhr, formData){
+            formData.append('csrfmiddlewaretoken', csrftoken)
+            formData.append('new_post_id', newPostId)
+        })
+    },
+    maxFiles: 5,
+    maxFilesize: 4,
+    acceptedFiles: '.png, .jpg, .jpeg'
+})
+
 
 getData();
