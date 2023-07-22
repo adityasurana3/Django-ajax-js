@@ -1,11 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post, Profile, Photo
 from django.http import JsonResponse
 from .forms import PostForm
 from django.http import HttpResponse
+from .utils import action_permission
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def post_list_and_create(request):
     form = PostForm(request.POST or None)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -24,6 +27,7 @@ def post_list_and_create(request):
 # def ajax_hello_world(request):
 #     return JsonResponse({'text':'Hello World'})
 
+@login_required
 def load_post_data_views(request, num_posts):
     visible = 3
     upper = num_posts
@@ -44,6 +48,7 @@ def load_post_data_views(request, num_posts):
     return JsonResponse({'data_list':data_list[lower:upper],'size':size})
 
 
+@login_required
 def like_unlike_post(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         pk = request.POST.get('pk')
@@ -55,7 +60,9 @@ def like_unlike_post(request):
             liked = True
             obj.likes.add(request.user)
         return JsonResponse({'liked':liked,'count':obj.like_count})
+    return redirect('main-board')
 
+@login_required
 def post_detail_data_view(request, pk):
     post = Post.objects.get(pk=pk)
     data = {
@@ -66,6 +73,7 @@ def post_detail_data_view(request, pk):
     }
     return JsonResponse({'data':data})
 
+@login_required
 def post_detail(request, pk):
     post = Post.objects.get(pk=pk)
     form = PostForm(instance=post)
@@ -77,6 +85,8 @@ def post_detail(request, pk):
     }
     return render(request, 'posts/detail.html', context)
 
+@login_required
+@action_permission
 def update_post(request, pk):
     post = Post.objects.get(pk=pk)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -85,17 +95,22 @@ def update_post(request, pk):
         post.title = new_title
         post.body = new_body
         post.save()
-    return JsonResponse({
-        'title':new_title,
-        'body':new_body,
-    })
+        return JsonResponse({
+            'title':new_title,
+            'body':new_body,
+        })
+    return redirect('main-board')
+
+@login_required
+@action_permission
 def delete_post(request, pk):
-    print("Hello Delete")
     post = Post.objects.get(pk=pk)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         post.delete()
-    return JsonResponse({})
+        return JsonResponse({})
+    return JsonResponse({'msg':'access denies - ajax only'})
 
+@login_required
 def image_upload_view(request):
     if request.method == 'POST':
         img = request.FILES.get('file')
